@@ -1,0 +1,51 @@
+
+body{
+background-color: thistle;
+}
+h3{
+    text-align: center;
+    text-shadow: 3px 3px #d803ff;
+}
+img{
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding:5px;
+}
+#spotlight{
+    filter: grayscale(0%);
+    border-radius: 50%;
+    max-width: 75%;
+    opacity: 1;
+    filter: sepia(100%);
+}
+.midlist{
+    text-align: center;
+}
+#hoblist{
+    border-radius: 75%;
+}
+.imp{
+    font-weight: bold;
+    text-decoration: underline;
+}
+#jitspage{
+    background-image: url("/static/imgs/jits.jpg");
+    background-size: cover;
+}
+#yog{
+    background-image: radial-gradient(circle, #d270e4, #526786);
+    background-size: contain;
+}
+.fancy{
+    text-align: center;
+}
+.h{
+    background-color: transparent;
+border-top: 1px solid #ddd;
+border-radius: 75%;
+color: #fff;
+}
+#yabba{
+    max-width: 20%;
+}
+

@@ -1,0 +1,127 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Baking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+     <link rel="stylesheet" href="/static/css/homestyle.css">
+       <script src="/static/jquery/jquery-3.5.1.js"></script>
+      <script>
+          function getRandomColor() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+  }
+          return color;
+}
+ $(document).ready(function() {
+        var interval = setInterval(function (){
+            $("#c1").css("background-color", getRandomColor());
+            $("#c2").css("background-color", getRandomColor());
+            $("#c3").css("background-color", getRandomColor());
+            },500);
+
+          var interval = setInterval(function (){
+            var choice = Math.floor(Math.random()*3)+1;
+            var combo = "#c" + choice;
+            console.log(combo)
+            $(combo).fadeToggle();
+            },1000);
+ });
+      </script>
+  </head>
+
+  <body>
+  <div class="container">
+  <div class="alert alert-dark text-center" role="alert">
+  What Goes in Bread?
+</div>
+      <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Ingrediant</th>
+          <th scope="col">Always</th>
+          <th scope="col">Sometimes</th>
+          <th scope="col">Never</th>
+        </tr>
+      </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Flour</th>
+        <td colspan="3">✔</td>
+      </tr>
+      <tr>
+        <th scope="row" colspan="3">Soap</th>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row" colspan ="2">Oil</th>
+        <td colspan ="2">✔</td>
+      </tr>
+    <tr>
+        <th scope="row">Salt</th>
+        <td colspan="3">✔</td>
+      </tr>
+    <tr>
+        <th scope="row" colspan="2">Yeast</th>
+        <td colspan="2">✔</td>
+      </tr>
+     <tr>
+        <th scope="row">Water</th>
+        <td colspan="3">✔</td>
+      </tr>
+    </tbody>
+  </table>
+<div class="row">
+      <div class="col">
+  <div id="c1" class="card text-center mx-auto" style="width: 55%;" stlye="height:auto">
+  <img src="/static/imgs/egg.jpg" class="card-img-top" alt="Where's my picture of eggy bread">
+  <div class="card-body">
+    <p class="card-text"><div class="center-text">Khachapuri</div></p>
+  </div>
+</div>
+      </div>
+   <div class="col">
+  <div id="c2" class="card text-center mx-auto" style="width: 55%;" stlye="height:auto">
+  <img src="/static/imgs/italiano.jpg" class="card-img-top" alt="Ay, me a picture">
+  <div class="card-body">
+    <p class="card-text"><div class="center-text">Italian Loaf</div></p>
+  </div>
+</div>
+      </div>
+  <div class="col">
+  <di id="c3" class="card text-center mx-auto" style="width: 55%;" stlye="height:auto">
+  <img src="/static/imgs/muff.jpg" class="card-img-top" alt="Where's my picture of muffins">
+  <div class="card-body">
+    <p class="card-text"><div class="center-text">English Muffins and Babka</div></p>
+  </div>
+</div>
+      </div>
+</div>
+
+  <div class="row invisible">
+      <h2>The hour is {{ tod }}</h2>
+  </div>
+  <div class="row">
+      {% if tod > 20 %}
+      <h2 class="text-center">Time to make your sponge!</h2>
+      {% elif tod>16 %}
+      <h2 class="text-center">Go eat your bread!</h2>
+      {% elif tod>12 %}
+      <h2 class="text-center">Through your loaf in the oven!</h2>
+      {% elif tod>8 %}
+      <h2 class="text-center">Shape your loaf and let it rise</h2>
+      {% elif tod>4 %}
+      <h2 class="text-center">Mix and knead your dough!</h2>
+      {% else %}
+      <h2 class="text-center">Go to bed!</h2>
+      {% endif %}
+  </div>
+  <div class="row">
+    <a href="/" class="text-center">Enough Bread, Take me Home</a>
+  </div>
+      </div>
+  </body>
+</html>

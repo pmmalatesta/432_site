@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>{{tittle}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/homestyle.css">
+    <script src="/static/jquery/jquery-3.5.1.js"></script>
+      <script>
+        function getRandomColor() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+  }
+          return color;
+}
+      function  clockit(){
+                //https://dev.to/arc__coder/real-time-javascript-clock-2dn0 heavy inspired by this example
+
+        var d = new Date();
+                var hrs = d.getHours();
+                var min = d.getMinutes();
+                var secs = d.getSeconds();
+                if (min<10){
+                    min = "0" + min;
+                }
+                if (secs<10){
+                    secs = "0" + secs;
+                }
+
+                var tstring = (hrs + ":" + min + ":" + secs)
+                document.getElementById("clocker").innerHTML = tstring;
+            }
+        $(document).ready(function() {
+          $("body").click(function () {
+            $(this).css("background-color", getRandomColor());
+          })
+          var interval = setInterval(clockit, 1000);
+        });
+
+    </script>
+  </head>
+
+  <body>
+<div class="jumbotron">
+    <h1 class="text-center" id="clocker">0000000</h1>
+  <p class="text-center">Welcome to my website!</p>
+  <p class="text-center">Click around to learn about some of my hobbies.</p>
+    </div>
+  <div class="container">
+
+
+<div class="row"><h2 class="midlist">Learn More About Hobbies</h2></div>
+<ul class="list-group text-center list-group-flush" id="hoblist">
+  <li class="list-group-item list-group-item-primary"><a href="jits">Jiu Jitsu</a></li>
+  <li class="list-group-item list-group-item-danger"><a href="yoga">Yoga</a></li>
+  <li class="list-group-item list-group-item-primary"><a href="baking">Baking</a></li>
+</ul>
+    <div class="text-center">
+<h2>My Photos</h2>
+<img id="spotlight" src="/static/imgs/fris2.jpg" class="img-fluid" alt="should be muddy">
+    </div>
+  <div class="row">
+    <p class="text-center"><small>©Malatesta Enterprises 2020-2021</small></p>
+      <p class="text-center"><small>Buy This Website</small></p>
+      {% if money < 1000000 %}
+      <p class="text-center"><small>Offers Starting at ${{ money }}</small></p>
+      {% else %}
+      <p class="text-center"><small>More than you can afford</small></p>
+      {% endif %}
+
+  </div>
+    </div>
+</body>
+</html>

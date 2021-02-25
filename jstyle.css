@@ -1,0 +1,28 @@
+body{
+background-image: url("jits.jpg");
+    background-size: cover;
+}
+h1{
+ text-align: center;
+    color: mediumturquoise;
+}
+h2{
+ text-align: center;
+    color:tomato;
+    font-size: 5em;
+    border-color: violet;
+    border-width: 15;
+    border-style: solid;
+    background: bisque;
+    border-radius: 20px;
+}
+li{
+font-size: 1em;
+color:violet
+}
+a{
+color:white
+}
+.showdontblock{
+    opacity: .75;
+}

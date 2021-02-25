@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Yoga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+      <script src="/static/jquery/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="/static/css/homestyle.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+      body{
+        font-family: 'Dancing Script', cursive;
+      }
+    </style>
+      <script src=""https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js""></script>
+      <script>
+           $(document).ready(function() {
+          $(".card").mouseleave(function(){
+              $("#tricksy").remove();
+          });
+        });
+      </script>
+  </head>
+
+  <body id="yog">
+  <div class="container">
+  <div class="row">
+    <h1 class="fancy">Yoga's Benefits</h1>
+  </div>
+      <ul class="list-group text-center h------------------">
+          {% for benefit in benefits %}
+              <li class="list-group-item h">{{ benefit }}</li>
+              {% endfor %}
+      </ul>
+      </div>
+
+  <div class="card text-center mx-auto bg-secondary"  style="width: 15%;" stlye="height:auto">
+      <span id="placehold">
+  <a id="tricksy" class="text-center" href="/"><img id="yabba" src="/static/imgs/yogurt.png" class="img-fluid mx-auto text-center" alt="should be yoga"></a>
+      </span>
+  <div class="card-body">
+    <h2 class="card-text"><div class="center-text">Click the yogi to return home!</div></h2>
+
+</div>
+  </div>
+  </body>
+</html>
