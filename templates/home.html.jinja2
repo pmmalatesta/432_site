@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="/static/css/homestyle.css">
     <script src="/static/jquery/jquery-3.5.1.js"></script>
       <script>
+          $(document).ready(function() {
+          $("#yolk").mouseleave(function(){
+              $(this).text("What scream's I'm really insecure?")
+          });
+          $("#yolk").mouseenter(function(){
+              $(this).text("HTTP instead of HTTPS")
+          });
+        });
         function getRandomColor() {
           var letters = '0123456789ABCDEF';
           var color = '#';
@@ -61,6 +69,9 @@
     <div class="text-center">
 <h2>My Photos</h2>
 <img id="spotlight" src="/static/imgs/fris2.jpg" class="img-fluid" alt="should be muddy">
+    <h2>Funny Jokes</h2>
+        <p id = 'jolk'>What scream's I'm really insecure?</p>
+        <p>Mouseover for answer</p>
     </div>
   <div class="row">
     <p class="text-center"><small>©Malatesta Enterprises 2020-2021</small></p>
