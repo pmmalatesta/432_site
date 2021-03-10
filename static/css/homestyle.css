@@ -49,3 +49,11 @@ color: #fff;
     max-width: 20%;
 }
 
+.tweetcard{
+    border-radius: 15%;
+    margin-bottom: 5px;
+}
+.tweethead{
+    border-radius: 15%;
+}
+

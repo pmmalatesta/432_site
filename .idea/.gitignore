@@ -5,5 +5,8 @@
 /../../../../../../:\Users\m214134\Documents\432\.idea/dataSources/
 /dataSources.local.xml
 .idea
+.db
+/.idea
+devdb.db
 # Editor-based HTTP Client requests
 /httpRequests/
