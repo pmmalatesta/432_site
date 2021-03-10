@@ -51,7 +51,7 @@ async def like(request):
 
 def main():
     global conn
-    conn = sqlite3.connect("devdb.db")
+    conn = sqlite3.connect("tweetdb.db")
     app = web.Application()
     aiohttp_jinja2.setup(app,
                          loader=jinja2.FileSystemLoader('templates'))
