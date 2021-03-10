@@ -29,9 +29,10 @@ async def jits(request):
 
 async def addTweet(request):
     data = await request.post()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
-    conn.commit()
+    if data['username'] != "" and data['content'] !="":
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
+        conn.commit()
     raise web.HTTPFound("/")
 
 async def like(request):
@@ -61,7 +62,7 @@ def main():
                     web.get('/like', like)])
 
     #web.run_app(app, host="0.0.0.0", port=80)
-    web.run_app(app,host="0.0.0.0", port=80)
+    web.run_app(app,host="0.0.0.0", port=5000)
     #print("Webserver 1.0")
 
 if __name__=="__main__":
