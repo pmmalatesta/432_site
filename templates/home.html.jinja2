@@ -79,6 +79,9 @@
                 </div>
   {% endfor %}
     <form action ="/tweet" method="post">
+        <label>Username</label>
+        <input name="username" type="text">
+        <label>Tweet</label>
         <input name="content" type="text">
         <input type="submit" value="Tweet">
     </form>
