@@ -31,7 +31,9 @@ async def addTweet(request):
     data = await request.post()
     if data['username'] != "" and data['content'] !="":
         cursor = conn.cursor()
+        #query ="INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username'])
         cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
+        #cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username']))
         conn.commit()
     raise web.HTTPFound("/")
 
