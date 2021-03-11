@@ -32,7 +32,7 @@ async def addTweet(request):
     if data['username'] != "" and data['content'] !="":
         cursor = conn.cursor()
         query ="INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username'])
-        print(query)
+        #print(query)
         cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
         #cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username']))
         conn.commit()
@@ -42,7 +42,7 @@ async def like(request):
     idnum = int(request.query['id'])
     cursor = conn.cursor()
     query = "SELECT likes FROM tweets WHERE id=\"%d\"" %idnum
-    cursor.execute("SELECT likes FROM tweets WHERE id=?;", (idnum))
+    cursor.execute(query)
     result = cursor.fetchone()[0];
     likenum = result+1
     addlike = "UPDATE tweets SET likes=%d WHERE id=%d;" %(likenum,idnum)
