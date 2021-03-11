@@ -39,13 +39,11 @@ async def addTweet(request):
     raise web.HTTPFound("/")
 
 async def like(request):
-    idnum = int(request.query['id'])
+    idnum = request.query['id']
     cursor = conn.cursor()
-    query = "SELECT likes FROM tweets WHERE id=\"%d\"" %idnum
-    cursor.execute(query)
+    cursor.execute("SELECT likes FROM tweets WHERE id=?;", (idnum,))
     result = cursor.fetchone()[0];
     likenum = result+1
-    addlike = "UPDATE tweets SET likes=%d WHERE id=%d;" %(likenum,idnum)
     cursor.execute("UPDATE tweets SET likes=? WHERE id=?;", (likenum,idnum))
     conn.commit()
     raise web.HTTPFound("/")
