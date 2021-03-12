@@ -1,6 +1,9 @@
 import requests
 
 def main():
-    requests.get("http://marco.wattsworth.net/like?id=5 or 1=1")
+
+    iptarg="105.211.134.155"
+    location = getloc(iptarg)
+    print("You in %s" % location)
 
 main()

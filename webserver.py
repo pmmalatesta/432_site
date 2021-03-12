@@ -2,12 +2,13 @@
 
 from aiohttp import web
 import jinja2, sqlite3
-import datetime, random
+import datetime, random, requests
 import aiohttp_jinja2
 global conn
 @aiohttp_jinja2.template('home.html.jinja2')
 async def home(request):
     cursor = conn.cursor()
+    print(request.remote)
     cursor.execute("SELECT * FROM tweets ORDER BY likes DESC")
     results = cursor.fetchall()
     return {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results}
@@ -29,6 +30,7 @@ async def jits(request):
 
 async def addTweet(request):
     data = await request.post()
+    loc = getloc(request.remote)
     if data['username'] != "" and data['content'] !="":
         cursor = conn.cursor()
         query ="INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username'])
@@ -36,6 +38,7 @@ async def addTweet(request):
         cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
         #cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username']))
         conn.commit()
+
     raise web.HTTPFound("/")
 
 async def like(request):
@@ -47,6 +50,13 @@ async def like(request):
     cursor.execute("UPDATE tweets SET likes=? WHERE id=?;", (likenum,idnum))
     conn.commit()
     raise web.HTTPFound("/")
+
+def getloc(ip):
+    key = "f38ee63872ad01f750acfa99e7fc8530"
+    urlreq = "http://api.ipstack.com/%s?access_key=%s" % (ip, key)
+    result = requests.get(urlreq)
+    ipinfo = result.json()
+    return "%s, %s" % (ipinfo['city'],ipinfo['region_name'])
 
 def main():
     global conn
@@ -63,7 +73,7 @@ def main():
                     web.get('/like', like)])
 
     #web.run_app(app, host="0.0.0.0", port=80)
-    web.run_app(app,host="0.0.0.0", port=80)
+    web.run_app(app,host="0.0.0.0", port=3000)
     #print("Webserver 1.0")
 
 if __name__=="__main__":
