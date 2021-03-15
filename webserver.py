@@ -31,7 +31,6 @@ async def addTweet(request):
     data = await request.post()
     if data['username'] != "" and data['content'] !="":
         loc = getloc(request.remote)
-        print(request.remote)
         #loc = getloc("136.160.90.40")
         ts = time.time()
         cursor = conn.cursor()
