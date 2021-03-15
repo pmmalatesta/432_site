@@ -2,7 +2,7 @@
 
 from aiohttp import web
 import jinja2, sqlite3
-import datetime, random, requests
+import datetime, random, requests, time
 import aiohttp_jinja2
 global conn
 @aiohttp_jinja2.template('home.html.jinja2')
@@ -30,12 +30,14 @@ async def jits(request):
 
 async def addTweet(request):
     data = await request.post()
-    loc = getloc(request.remote)
     if data['username'] != "" and data['content'] !="":
+        loc = getloc(request.remote)
+        #loc = getloc("136.160.90.40")
+        ts = time.time()
         cursor = conn.cursor()
         query ="INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username'])
         #print(query)
-        cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(?,0,?)", (data['content'],data['username']))
+        cursor.execute("INSERT INTO tweets (content, likes, user, location, timestamp) VALUES(?,0,?,?,?)", (data['content'],data['username'],loc,ts))
         #cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username']))
         conn.commit()
 
@@ -50,6 +52,17 @@ async def like(request):
     cursor.execute("UPDATE tweets SET likes=? WHERE id=?;", (likenum,idnum))
     conn.commit()
     raise web.HTTPFound("/")
+
+async def lickjson(request):
+    idnum = request.query['id']
+    cursor = conn.cursor()
+    cursor.execute("SELECT likes FROM tweets WHERE id=?;", (idnum,))
+    result = cursor.fetchone()[0];
+    likenum = result + 1
+    cursor.execute("UPDATE tweets SET likes=? WHERE id=?;", (likenum, idnum))
+    conn.commit()
+    mess = {'likecount': likenum}
+    return web.json_response(mess)
 
 def getloc(ip):
     key = "f38ee63872ad01f750acfa99e7fc8530"
@@ -69,6 +82,7 @@ def main():
                     web.get('/baking', baking),
                     web.get('/jits', jits),
                     web.static('/static', 'static'),
+                    web.get('/likes.json',lickjson),
                     web.post('/tweet', addTweet),
                     web.get('/like', like)])
 
