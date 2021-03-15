@@ -8,7 +8,6 @@ global conn
 @aiohttp_jinja2.template('home.html.jinja2')
 async def home(request):
     cursor = conn.cursor()
-    print(request.remote)
     cursor.execute("SELECT * FROM tweets ORDER BY likes DESC")
     results = cursor.fetchall()
     return {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results}
@@ -32,6 +31,7 @@ async def addTweet(request):
     data = await request.post()
     if data['username'] != "" and data['content'] !="":
         loc = getloc(request.remote)
+        print(request.remote)
         #loc = getloc("136.160.90.40")
         ts = time.time()
         cursor = conn.cursor()
