@@ -49,9 +49,14 @@
           $(".like-btn").click(function(){
               var id = $(this).attr('data-tweetid');
               var reqstr = 'likes.json?id=' + id;
-              var selectstr = '[data-tweetid='+id+"]"
+              var fadetime = 50;
               $.getJSON(reqstr,function (likenum){
-                  $(selectstr).text("Likes: " + likenum['likecount'])
+                  let likecount=$('#tweet-lk-count-'+id);
+                  likecount.fadeOut(fadetime);
+                  setTimeout(function(){
+                      likecount.text(likenum['likecount']+" People like this tweet!");
+                  },fadetime);
+                  likecount.fadeIn(fadetime);
               });
           });
             $('.postdate').each(function (){
@@ -96,8 +101,9 @@
                             <div class="row">
                                 <p>{{ tweet[0] }}</p>
                                 <div class="col-6">
-                                <span class="btn btn-info like-btn" data-tweetid={{ tweet[3] }}>Likes: <u>{{ tweet[4] }}</u></span>
+                                <span class="btn btn-info like-btn" data-tweetid={{ tweet[3] }}>Like!</span>
                                 </div>
+                                <span class ="text-primary" id="tweet-lk-count-{{ tweet[3] }}">{{ tweet[4] }} People like this tweet!</span>
                             </div>
                             <div class="row">
                                 <p>Posted from {{ tweet[2] }}</p>
