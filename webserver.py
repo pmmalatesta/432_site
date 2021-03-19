@@ -30,8 +30,7 @@ async def jits(request):
 async def addTweet(request):
     data = await request.post()
     if data['username'] != "" and data['content'] !="":
-        print(request.headers);
-        loc = getloc(request.remote)
+        loc = getloc(request.headers['X-Forwarded-For'])
         #loc = getloc("136.160.90.40")
         ts = time.time()
         cursor = conn.cursor()
