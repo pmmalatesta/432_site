@@ -5,12 +5,15 @@ import jinja2, sqlite3
 import datetime, random, requests, time
 import aiohttp_jinja2
 global conn
-@aiohttp_jinja2.template('home.html.jinja2')
+#@aiohttp_jinja2.template('home.html.jinja2')
 async def home(request):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tweets ORDER BY likes DESC")
     results = cursor.fetchall()
-    return {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results}
+    context = {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results}
+    response= aiohttp_jinja2.render_template('home.html.jinja2',request,context)
+    response.set_cookie('looged_in', 'yes')
+    return response
 
 @aiohttp_jinja2.template('yoga.html.jinja2')
 async def yoga(request):
@@ -63,6 +66,16 @@ async def lickjson(request):
     mess = {'likecount': likenum}
     return web.json_response(mess)
 
+async def kewlbus(request):
+    try:
+        r = requests.get("http://127.0.0.1:5000/data.json")
+        mess = {'connect': 1}
+        return web.json_response(mess)
+    except:
+        mess = {'connect': 0}
+        return web.json_response(mess)
+
+
 def getloc(ip):
     key = "f38ee63872ad01f750acfa99e7fc8530"
     urlreq = "http://api.ipstack.com/%s?access_key=%s" % (ip, key)
@@ -83,7 +96,8 @@ def main():
                     web.static('/static', 'static'),
                     web.get('/likes.json',lickjson),
                     web.post('/tweet', addTweet),
-                    web.get('/like', like)])
+                    web.get('/like', like),
+                    web.get('/kewl.json', kewlbus)])
 
     #web.run_app(app, host="0.0.0.0", port=80)
     web.run_app(app,host="127.0.0.1", port=4000)

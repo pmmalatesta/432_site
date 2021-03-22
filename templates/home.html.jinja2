@@ -16,6 +16,22 @@
   }
           return color;
 }
+    function getBus(){
+            $.getJSON('kewl.json',function (resp){
+                  if(resp['connect']==1){
+                      $('#busstat').text("The Kewlbus is online, click below to check it out!");
+                      $("#buss").removeClass("bwhite");
+                      $("#buss").removeClass("nbwhite");
+                      $("#buss").addClass("nbwhite");
+                  }
+                  else{
+                      $('#busstat').text("The Kewlbus is offline, click below to check it out!");
+                      $("#buss").removeClass("bwhite");
+                      $("#buss").removeClass("nbwhite");
+                      $("#buss").addClass("bwhite");
+                  }
+              });
+    }
       function  clockit(){
                 //https://dev.to/arc__coder/real-time-javascript-clock-2dn0 heavy inspired by this example
 
@@ -34,11 +50,13 @@
                 document.getElementById("clocker").innerHTML = tstring;
             }
         $(document).ready(function() {
+            getBus();
           $("body").click(function () {
             $(this).css("background-color", getRandomColor());
             $(".card").css("background-color", getRandomColor());
           })
           var interval = setInterval(clockit, 1000);
+          setInterval(getBus,10000);
           $("#jolk").mouseleave(function(){
               $(this).text("What scream's I'm really insecure?")
           });
@@ -80,6 +98,8 @@
 
   </head>
   <body>
+  <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0" nonce="7ilswWMi"></script>
 <div class="jumbotron">
     <h1 class="text-center" id="clocker">0000000</h1>
   <p class="text-center">Welcome to my website!</p>
@@ -132,7 +152,13 @@
 </ul>
     <div class="text-center">
 <h2>My Photos</h2>
-<img id="spotlight" src="/static/imgs/fris2.jpg" class="img-fluid" alt="should be muddy">
+        <div class="row text-center">
+            <img id="spotlight" src="/static/imgs/fris2.jpg" class="img-fluid text-center" alt="should be muddy">
+        </div>
+        <div class="row text-center">
+            <h2 id="busstat"></h2>
+            <a href="https://kewlbus.wattsworth.net"><img id="buss" src="/static/imgs/bus.jpg" alt="Bus?"></a>
+        </div>
     <h2>Funny Jokes</h2>
         <p id = 'jolk'>What screams I'm really insecure?</p>
         <p>Mouseover for answer</p>
@@ -148,6 +174,7 @@
 
   </div>
         </div>
+  <div class="fb-like" data-href="https://paul.wattsworth.net" data-width="" data-layout="standard" data-action="like" data-size="large" data-share="true"></div>
   </div>
 </body>
 </html>
