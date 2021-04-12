@@ -13,15 +13,21 @@ async def home(request):
     # they have a cookie is it correct?
     conn = sqlite3.connect("tweetdb.db")
     cursor = conn.cursor()
-    #cursor.execute("SELECT COUNT(*) FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
-    #goodcook = cursor.fetchone()
-    #print(goodcook[0])
-    #if goodcook[0]!=1:
-    #    raise web.HTTPFound('/login')
+    cursor.execute("SELECT userName FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
+    whodis = cursor.fetchone()
+    if whodis is None:
+        login=False
+        usern = "NA"
+    else:
+        login=True
+        usern = whodis[0]
+
+    cursor = conn.cursor()
+
     cursor.execute("SELECT * FROM tweets ORDER BY likes DESC")
     results = cursor.fetchall()
     conn.close()
-    context = {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results}
+    context = {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results,'loggedin':login,"user":usern}
     response= aiohttp_jinja2.render_template('home.html.jinja2',request,context)
     response.set_cookie('looged_in', 'yes')
     return response
@@ -51,6 +57,7 @@ async def logout(request):
 
 
 async def addTweet(request):
+    print(request.cookies['logged_in'])
     if "logged_in" not in request.cookies:
         raise web.HTTPFound('/login')
     # they have a cookie is it correct?
@@ -58,24 +65,21 @@ async def addTweet(request):
     cursor = conn.cursor()
     cursor.execute("SELECT COUNT(*) FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
     goodcook = cursor.fetchone()
-    if goodcook[0]!=1:
+    if goodcook is None:
         conn.close()
         raise web.HTTPFound('/login')
-    cursor.execute("SELECT username FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
-    poster=cursor.fetchone()
     data = await request.post()
     if data['content'] !="":
         loc = getloc(request.headers['X-Forwarded-For'])
         #loc = getloc("136.160.90.40")
         ts = time.time()
         cursor = conn.cursor()
-        query ="INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], poster[0])
-        #print(query)
-        cursor.execute("INSERT INTO tweets (content, likes, user, location, timestamp) VALUES(?,0,?,?,?)", (data['content'],poster[0],loc,ts))
+        cursor.execute("INSERT INTO tweets (content, likes, user, location, timestamp) VALUES(?,0,?,?,?)", (data['content'],goodcook[0],loc,ts))
         #cursor.execute("INSERT INTO tweets (content, likes, user) VALUES(\"%s\",0,\"%s\");" %(data['content'], data['username']))
         conn.commit()
         conn.close()
-    raise web.HTTPFound("/")
+        raise web.HTTPFound("/")
+    raise web.HTTPFound('/login')
 
 async def logpost(request):
     data = await request.post()
@@ -91,7 +95,7 @@ async def logpost(request):
         if rec[0] == hashlib.md5(tocomp.encode('ascii')).hexdigest():
             conn = sqlite3.connect("tweetdb.db")
             cursor = conn.cursor()
-            cook = secrets.token_hex()
+            cook = secrets.token_hex(8)
             cursor.execute("UPDATE users SET cookie = ? WHERE username=?", (cook, data['username']))
             conn.commit()
             conn.close()
@@ -132,6 +136,22 @@ async def lickjson(request):
     mess = {'likecount': likenum}
     return web.json_response(mess)
 
+async def deltweet(request):
+    mess = {'mess': "bad"}
+    idnum = request.query['id']
+    conn = sqlite3.connect("tweetdb.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT user FROM tweets WHERE id=?;", (idnum,))
+    result = cursor.fetchone()[0];
+    cursor.execute("SELECT userName FROM users WHERE cookie=?;", (request.cookies['logged_in'],))
+    r2 = cursor.fetchone()
+    if r2 is None or r2[0] != result:
+        return web.json_response(mess)
+    cursor.execute("DELETE FROM tweets WHERE id=?;", (idnum,))
+    conn.commit()
+    conn.close()
+    raise web.HTTPFound("/")
+
 async def kewlbus(request):
     try:
         r = requests.get("http://127.0.0.1:5000/data.json")
@@ -165,6 +185,8 @@ def main():
                     web.get('/login', loginpg),
                     web.post('/login',logpost),
                     web.get('/logout',logout),
+                    web.get('/delete.json',deltweet),
+                    web.get('/redir', home),
                     web.get('/kewl.json', kewlbus)])
     #web.run_app(app, host="0.0.0.0", port=80)
     web.run_app(app,host="127.0.0.1", port=4000)

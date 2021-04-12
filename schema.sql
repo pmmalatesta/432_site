@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "tweets" (
 
 CREATE TABLE IF NOT EXISTS "users" (
   "userName" TEXT NOT NULL UNIQUE,
-  "pash" TEXT,
+  "password" TEXT,
   "cookie" TEXT,
   "salt" TEXT
 );
