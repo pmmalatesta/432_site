@@ -33,7 +33,6 @@ async def home(request):
     conn.close()
     context = {"tittle": "WEBSITE", "money": random.randint(100,10000000), "twits": results,'loggedin':login,"user":usern}
     response= aiohttp_jinja2.render_template('home.html.jinja2',request,context)
-    response.set_cookie('looged_in', 'yes')
     return response
 
 @aiohttp_jinja2.template('yoga.html.jinja2')
@@ -92,7 +91,7 @@ async def logpost(request):
     rec=cursor.fetchone()
     conn.close()
     if rec == None:
-        raise web.HTTPFound('/')
+        raise web.HTTPFound('/login')
     else:
         tocomp = data['pword'] + rec[1]
         if rec[0] == hashlib.md5(tocomp.encode('ascii')).hexdigest():
@@ -108,7 +107,7 @@ async def logpost(request):
             response.cookies['logged_in'] = cook
             return response
         else:
-            raise web.HTTPFound('/')
+            raise web.HTTPFound('/login')
     #cursor = conn.cursor()
     #cursor.execute("SELECT password FROM users WHERE username=?;", (uName,))
     #result = cursor.fetchone()[0];
@@ -149,7 +148,8 @@ async def deltweet(request):
     cursor.execute("SELECT userName FROM users WHERE cookie=?;", (request.cookies['logged_in'],))
     r2 = cursor.fetchone()
     if r2 is None or r2[0] != result:
-        return web.json_response(mess)
+        if r2[0] != "The Don":
+            return web.json_response(mess)
     cursor.execute("DELETE FROM tweets WHERE id=?;", (idnum,))
     conn.commit()
     conn.close()
