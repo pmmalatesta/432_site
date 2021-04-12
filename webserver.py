@@ -150,7 +150,8 @@ async def deltweet(request):
     cursor.execute("DELETE FROM tweets WHERE id=?;", (idnum,))
     conn.commit()
     conn.close()
-    raise web.HTTPFound("/")
+    mess = {'mess': "good"}
+    return web.json_response(mess)
 
 async def kewlbus(request):
     try:

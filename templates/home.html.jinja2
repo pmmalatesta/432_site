@@ -94,7 +94,8 @@
                       window.location.assign("/login")
                   }
                   else{
-                      window.location.assign("/redir");
+                      selectstr= "[cahdid="+id+"]";
+                       location.reload(true);
                   }
               });
           });
@@ -134,7 +135,7 @@
               <div class="row">
           {% endif %}
           <div class = col-4>
-                    <div class="card tweetcard border-secondary">
+                    <div class="card tweetcard border-secondary" cahdid={{ tweet[3] }}>
                         <div class="card-title text-center border-secondary bg-primary tweethead">
                             <b>{{ tweet[5] }}</b>
                         </div>
