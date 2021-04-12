@@ -151,7 +151,7 @@
                                 <p>Posted from {{ tweet[2] }}</p>
                                 <p class="postdate" ts={{ tweet[1] }}></p>
                             </div>
-                            {% if (loggedin and (tweet[5]==user or tweet[5]== "The Don") %}
+                            {% if (loggedin and (tweet[5]==user or tweet[5]== "The Don")) %}
                         <div class="row">
                             <span class="btn btn-danger delbtn"  data-tweetid={{ tweet[3] }}>Delete Tweet</span>
                         </div>
