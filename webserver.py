@@ -13,14 +13,17 @@ async def home(request):
     # they have a cookie is it correct?
     conn = sqlite3.connect("tweetdb.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT userName FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
-    whodis = cursor.fetchone()
-    if whodis is None:
+    if "logged_in" not in request.cookies:
         login=False
-        usern = "NA"
     else:
-        login=True
-        usern = whodis[0]
+        cursor.execute("SELECT userName FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
+        whodis = cursor.fetchone()
+        if whodis is None:
+            login=False
+            usern = "NA"
+        else:
+            login=True
+            usern = whodis[0]
 
     cursor = conn.cursor()
 
