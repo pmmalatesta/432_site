@@ -65,7 +65,7 @@ async def addTweet(request):
     # they have a cookie is it correct?
     conn = sqlite3.connect("tweetdb.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
+    cursor.execute("SELECT userName FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
     goodcook = cursor.fetchone()
     if goodcook is None:
         conn.close()
