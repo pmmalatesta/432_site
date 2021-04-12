@@ -15,6 +15,7 @@ async def home(request):
     cursor = conn.cursor()
     if "logged_in" not in request.cookies:
         login=False
+        usern = "NA"
     else:
         cursor.execute("SELECT userName FROM users WHERE cookie = ?", (request.cookies['logged_in'],))
         whodis = cursor.fetchone()
