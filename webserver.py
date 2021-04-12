@@ -61,7 +61,6 @@ async def logout(request):
 
 
 async def addTweet(request):
-    print(request.cookies['logged_in'])
     if "logged_in" not in request.cookies:
         raise web.HTTPFound('/login')
     # they have a cookie is it correct?
