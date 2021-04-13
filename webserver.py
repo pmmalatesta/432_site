@@ -53,6 +53,10 @@ async def jits(request):
 async def loginpg(request):
     return {}
 
+@aiohttp_jinja2.template('newuser.html.jinja2')
+async def createaccount(request):
+    return {}
+
 async def logout(request):
     response = aiohttp_jinja2.render_template('loginpage.html.jinja2', request, {})
     response.cookies['logged_in'] = ''
@@ -125,6 +129,28 @@ async def like(request):
     conn.close()
     raise web.HTTPFound("/")
 
+async def makeaman(request):
+    data = await request.post()
+    conn = sqlite3.connect("tweetdb.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (data['username'],))
+    rec = cursor.fetchone()
+    print(rec)
+    if rec[0] <1:
+        salty = secrets.token_hex(8)
+        saltypass = data['password'] + salty
+        storeword = hashlib.md5(saltypass.encode('ascii')).hexdigest()
+        conn = sqlite3.connect("tweetdb.db")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (username, password, salt) VALUES (?,?,?)",
+                       (data['username'], storeword, salty))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        raise web.HTTPFound("/login")
+    conn.close()
+    raise web.HTTPFound("/makeaccount")
+
 async def lickjson(request):
     idnum = request.query['id']
     conn = sqlite3.connect("tweetdb.db")
@@ -191,6 +217,8 @@ def main():
                     web.get('/logout',logout),
                     web.get('/delete.json',deltweet),
                     web.get('/redir', home),
+                    web.get('/makeaccount', createaccount),
+                    web.post('/makeaccount', makeaman),
                     web.get('/kewl.json', kewlbus)])
     #web.run_app(app, host="0.0.0.0", port=80)
     web.run_app(app,host="127.0.0.1", port=4000)
